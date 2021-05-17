@@ -1,14 +1,12 @@
-import json
-
 from mdutils import MdUtils
 
 from static import static
 from util import str2time
 
-target = "casbin"
+target_list = ["casbin", "casdoor"]
 
-start_time = "2021-03-22T00:00:00Z"
-end_time = "2021-03-31T23:59:59Z"
+start_time = "2021-01-10T00:50:59Z"
+end_time = "2021-05-17T00:50:59Z"
 
 data = static(start_time, end_time)
 info = data.get_info()
@@ -20,18 +18,21 @@ comment_issues = []
 
 for node in info['data']['user']['contributionsCollection']["issueContributions"]['nodes']:
     repo = node["issue"]["repository"]["nameWithOwner"]
-    if repo.find(target) != -1:
-        open_issues.append(node)
+    for target in target_list:
+        if repo.find(target) != -1:
+            open_issues.append(node)
 
 for node in info['data']['user']['contributionsCollection']["pullRequestContributions"]['nodes']:
     repo = node["pullRequest"]["repository"]["nameWithOwner"]
-    if repo.find(target) != -1:
-        open_prs.append(node)
+    for target in target_list:
+        if repo.find(target) != -1:
+            open_prs.append(node)
 
 for node in info['data']['user']['contributionsCollection']["pullRequestReviewContributions"]['nodes']:
     repo = node["pullRequest"]["repository"]["nameWithOwner"]
-    if repo.find(target) != -1:
-        review_prs.append(node)
+    for target in target_list:
+        if repo.find(target) != -1:
+            review_prs.append(node)
 
 comment_issue_ids = []
 for node in info['data']['user']["issueComments"]['nodes']:
@@ -39,11 +40,12 @@ for node in info['data']['user']["issueComments"]['nodes']:
     cur_datetime = str2time(node["issue"]["createdAt"])
     start_datetime = str2time(start_time)
     end_datetime = str2time(end_time)
-    if repo.find(target) != -1:
-        if start_datetime <= cur_datetime <= end_datetime:
-            if node['issue']['id'] not in comment_issue_ids:
-                comment_issue_ids.append(node['issue']['id'])
-                comment_issues.append(node)
+    for target in target_list:
+        if repo.find(target) != -1:
+            if start_datetime <= cur_datetime <= end_datetime:
+                if node['issue']['id'] not in comment_issue_ids:
+                    comment_issue_ids.append(node['issue']['id'])
+                    comment_issues.append(node)
 
 mdFile = MdUtils(file_name='output', title='Weekly Report')
 

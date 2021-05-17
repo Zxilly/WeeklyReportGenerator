@@ -18,8 +18,6 @@ class static:
     json_header = {"Accept": "application/vnd.github.v3+json"}
     beta_json_header = {"Accept": "application/vnd.github.inertia-preview+json"}
 
-    time_struct = "%Y-"
-
     GraphQL_query_template = query
 
     @property
