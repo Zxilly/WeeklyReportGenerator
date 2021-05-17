@@ -21,18 +21,21 @@ for node in info['data']['user']['contributionsCollection']["issueContributions"
     for target in target_list:
         if repo.find(target) != -1:
             open_issues.append(node)
+            break
 
 for node in info['data']['user']['contributionsCollection']["pullRequestContributions"]['nodes']:
     repo = node["pullRequest"]["repository"]["nameWithOwner"]
     for target in target_list:
         if repo.find(target) != -1:
             open_prs.append(node)
+            break
 
 for node in info['data']['user']['contributionsCollection']["pullRequestReviewContributions"]['nodes']:
     repo = node["pullRequest"]["repository"]["nameWithOwner"]
     for target in target_list:
         if repo.find(target) != -1:
             review_prs.append(node)
+            break
 
 comment_issue_ids = []
 for node in info['data']['user']["issueComments"]['nodes']:
@@ -46,6 +49,7 @@ for node in info['data']['user']["issueComments"]['nodes']:
                 if node['issue']['id'] not in comment_issue_ids:
                     comment_issue_ids.append(node['issue']['id'])
                     comment_issues.append(node)
+                    break
 
 mdFile = MdUtils(file_name='output', title='Weekly Report')
 
